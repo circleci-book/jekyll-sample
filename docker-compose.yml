@@ -4,7 +4,8 @@ services:
   jekyll:
     image: jekyll/jekyll
     volumes:
-      - .:/srv/jekyll
+      - $PWD:/srv/jekyll
+      - $PWD/vendor/bundle:/usr/local/bundle
     command: jekyll serve --watch --force_polling
     ports:
       - 4000:4000
