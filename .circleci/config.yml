@@ -43,14 +43,12 @@ jobs:
       - attach_workspace:
           at: ./
       - run:
-          name: Git Setup
+          name: Deploy to gh-page
           command: |
+            cd _site
             git init
             git config user.name ${CIRCLE_USERNAME}
             git config user.email circleci@example.com
-      - run:
-          name: Deploy to gh-page
-          command: |
             git add .
             git commit -m "deploy: ${CIRCLE_SHA1}"
             git push --force ${CIRCLE_REPOSITORY_URL} master:gh-pages
