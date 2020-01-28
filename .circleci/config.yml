@@ -52,7 +52,7 @@ jobs:
           name: Deploy to gh-page
           command: |
             git add .
-            git commit -m "deploy: {CIRCLE_SHA1}"
+            git commit -m "deploy: ${CIRCLE_SHA1}"
             git push --force ${CIRCLE_REPOSITORY_URL} master:gh-pages
 workflows:
   version: 2
