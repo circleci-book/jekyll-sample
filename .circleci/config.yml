@@ -48,6 +48,9 @@ jobs:
             git init
             git config user.name ${CIRCLE_USERNAME}
             git config user.email circleci@example.com
+      - add_ssh_keys:
+          fingerprints:
+            - cf:61:c6:58:f4:8c:51:6a:2a:df:68:b4:f0:1a:15:b1
       - run:
           name: Deploy to gh-page
           command: |
