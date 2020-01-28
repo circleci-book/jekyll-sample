@@ -53,16 +53,13 @@ jobs:
             git config user.name ${CIRCLE_USERNAME}
             git config user.email circleci@example.com
             git add .
-            git commit -m "deploy: ${CIRCLE_SHA1}"
+            git commit -m "[ci skip] deploy ${CIRCLE_SHA1}"
             git push --force ${CIRCLE_REPOSITORY_URL} master:gh-pages
 workflows:
   version: 2
   test-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore: gh-pages
+      - build
       - deploy:
           requires:
             - build
