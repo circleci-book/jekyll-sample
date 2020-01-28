@@ -42,20 +42,18 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - run:
-          name: Git Setup
-          command: |
-            git init
-            git config user.name ${CIRCLE_USERNAME}
-            git config user.email circleci@example.com
       - add_ssh_keys:
           fingerprints:
             - cf:61:c6:58:f4:8c:51:6a:2a:df:68:b4:f0:1a:15:b1
       - run:
           name: Deploy to gh-page
           command: |
+            cd _site
+            git init
+            git config user.name ${CIRCLE_USERNAME}
+            git config user.email circleci@example.com
             git add .
-            git commit -m "deploy: {CIRCLE_SHA1}"
+            git commit -m "deploy: ${CIRCLE_SHA1}"
             git push --force ${CIRCLE_REPOSITORY_URL} master:gh-pages
 workflows:
   version: 2
