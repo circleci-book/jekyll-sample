@@ -1,0 +1,64 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.3
+    environment:
+      BUNDLE_PATH: vendor/bundle
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - Gems-v1-{{ checksum "Gemfile.lock" }}
+            - Gems-v1-
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+      - save_cache:
+          key: Gems-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Jekyll build
+          command: bundle exec jekyll build
+      #- run:
+      #    name: HTMLProofer tests
+      #    command: |
+      #      bundle exec htmlproofer ./_site \
+      #        --allow-hash-href \
+      #        --check-favicon  \
+      #        --check-html \
+      #        --disable-external
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - _site
+  deploy:
+    machine:
+      image: true
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Git Setup
+          command: |
+            git init
+            git config user.name ${CIRCLE_USERNAME}
+            git config user.email circleci@example.com
+      - run:
+          name: Deploy to gh-page
+          command: |
+            git add .
+            git commit -m "deploy: {CIRCLE_SHA1}"
+            git push --force ${CIRCLE_REPOSITORY_URL} master:gh-pages
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
