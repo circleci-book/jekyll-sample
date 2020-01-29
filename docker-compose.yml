@@ -2,7 +2,7 @@ version: "3"
 
 services:
   jekyll:
-    image: jekyll/jekyll
+    image: jekyll/jekyll:4.0.0
     volumes:
       - $PWD:/srv/jekyll
       - $PWD/vendor/bundle:/usr/local/bundle
