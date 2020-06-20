@@ -12,7 +12,7 @@ jobs:
             - Gems-v1-{{ checksum "Gemfile.lock" }}
             - Gems-v1-
       - run:
-          name: Update bunder
+          name: bunderをアップデート # (d1)
           command: gem install bundler:2.0.2
       - run:
           name: Bundle Install
@@ -21,18 +21,10 @@ jobs:
           key: Gems-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - run:
-          name: Jekyll build
+      - run: # (d2)
+          name: jekyllビルド
           command: bundle exec jekyll build --baseurl ${CIRCLE_PROJECT_REPONAME}
-      #- run:
-      #    name: HTMLProofer tests
-      #    command: |
-      #      bundle exec htmlproofer ./_site \
-      #        --allow-hash-href \
-      #        --check-favicon  \
-      #        --check-html \
-      #        --disable-external
-      - persist_to_workspace:
+      - persist_to_workspace: # (d3)
           root: ./
           paths:
             - _site
@@ -40,13 +32,13 @@ jobs:
     machine:
       image: ubuntu-1604:201903-01
     steps:
-      - attach_workspace:
+      - attach_workspace: # (d4)
           at: ./
-      - add_ssh_keys:
+      - add_ssh_keys: # (d5)
           fingerprints:
             - cf:61:c6:58:f4:8c:51:6a:2a:df:68:b4:f0:1a:15:b1
-      - run:
-          name: Deploy to gh-page
+      - run: # (d6)
+          name: gh-pagesブランチにプッシュ
           command: |
             cd _site
             git init
