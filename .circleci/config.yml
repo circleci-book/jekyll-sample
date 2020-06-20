@@ -49,7 +49,7 @@ jobs:
             git push --force ${CIRCLE_REPOSITORY_URL} master:gh-pages
 workflows:
   version: 2
-  test-deploy:
+  build-deploy:
     jobs:
       - build
       - deploy:
