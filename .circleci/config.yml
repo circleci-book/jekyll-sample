@@ -11,9 +11,6 @@ jobs:
           keys:
             - Gems-v1-{{ checksum "Gemfile.lock" }}
             - Gems-v1-
-      # - run:
-      #     name: bunderをアップデート # (d1)
-      #     command: gem install bundler:2.0.2
       - run:
           name: Bundle Install
           command: bundle check || bundle install
@@ -21,10 +18,10 @@ jobs:
           key: Gems-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - run: # (d2)
+      - run: # (d1)
           name: jekyllビルド
           command: bundle exec jekyll build --baseurl ${CIRCLE_PROJECT_REPONAME}
-      - persist_to_workspace: # (d3)
+      - persist_to_workspace: # (d2)
           root: ./
           paths:
             - _site
@@ -32,12 +29,12 @@ jobs:
     machine:
       image: ubuntu-1604:201903-01
     steps:
-      - attach_workspace: # (d4)
+      - attach_workspace: # (d3)
           at: ./
-      - add_ssh_keys: # (d5)
+      - add_ssh_keys: # (d4)
           fingerprints:
             - cf:61:c6:58:f4:8c:51:6a:2a:df:68:b4:f0:1a:15:b1
-      - run: # (d6)
+      - run: # (d5)
           name: gh-pagesブランチにプッシュ
           command: |
             cd _site
